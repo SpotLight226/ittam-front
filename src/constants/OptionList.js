@@ -169,3 +169,38 @@ export const ITAssetsApprovalOptionList = [
     name: '반려',
   },
 ];
+
+export const NoticeOptionList = [
+  {
+    value: 'number',
+    name: '번호',
+  },
+  {
+    value: 'regdate',
+    name: '등록날짜',
+  },
+  {
+    value: 'title',
+    name: '제목',
+  },
+  {
+    value: 'user',
+    name: '작성자',
+  },  
+  {
+    value: 'enddate',
+    name: '만료날짜',
+  },
+  {
+    value: 'edit',
+    name: '수정',
+  },
+  {
+    value: 'delete',
+    name: '삭제',
+  },
+  {
+    value: 'click',
+    name: '조회수',
+  },
+];

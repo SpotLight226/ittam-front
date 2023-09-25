@@ -250,11 +250,11 @@ function NoticeDetail() {
                   </div> */}
 
 
-                <div style={{fontSize: "24px", marginBottom : '30px'}}>제목 {notice.notice_title}</div>
+                <div style={{fontSize: "24px", marginBottom : '30px'}}>{notice.notice_title}</div>
                  
                
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' ,paddingBottom : '10px',borderBottom: '1px solid #dbdbdb'}}>
-                  <span style={{ textAlign: 'left' }}>작성자 {notice.notice_name}</span>
+                  <span style={{ textAlign: 'left' }}>{notice.notice_name}</span>
                   <div>
                     <span style={{ marginLeft: '10px' }}>등록일 {formatDate(notice.notice_regdate)}</span>
                     <span style={{ marginLeft: '10px' }}>만료일 {formatDate(notice.notice_enddate)}</span>
@@ -272,7 +272,9 @@ function NoticeDetail() {
                       <img src={noticeimg.noticeimg_path} alt="이미지" style={{ maxWidth: '500px', width: '100%', height: 'auto' }}/>
                     </p>
                     }
-                    <div style={{ textAlign: 'center', marginBottom: '30px', whiteSpace: 'pre'  }}>{notice.notice_content}</div>
+                   <div style={{ textAlign: 'left', marginBottom: '30px', whiteSpace: 'pre-line' }}>
+                    {notice.notice_content}
+                  </div>
 
 
 

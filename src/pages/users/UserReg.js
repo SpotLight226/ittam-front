@@ -1,29 +1,44 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import DepartItem from "../../component/DepartItem";
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import DepartItem from '../../component/DepartItem';
 
 // 부서 리스트 유틸
-import { departList } from "../../constants/Depart";
-import { getStringDate } from "../../hooks/Date";
-import { UserDispatchContext } from "./Users";
+import { departList } from '../../constants/Depart';
+import { getStringDate } from '../../hooks/Date';
+import { UserDispatchContext } from './Users';
+import { tokenInfoContext } from '../../component/TokenInfoProvider';
 
 const UserReg = () => {
+  const { userRole } = useContext(tokenInfoContext);
   const navigate = useNavigate();
+  useEffect(() => {
+    if (userRole !== 'ROLE_ADMIN' && userRole !== 'ROLE_HIGH_ADMIN') {
+      if (userRole === 'ROLE_USER') {
+        navigate('/user/userMain');
+      } else if (userRole === 'ROLE_ADMIN') {
+        navigate('/admin/adminMain');
+      } else if (userRole === 'ROLE_HIGH_ADMIN') {
+        navigate('/highadmin/highAdminMain');
+      } else if (userRole === 'none') {
+        navigate('/');
+      }
+    }
+  }, []);
   const makeIdBtn = useRef();
 
   const { onCreate } = useContext(UserDispatchContext);
 
   // 새로 작성된 state
   const [content, setContent] = useState({
-    username: "",
-    password: "",
-    user_name: "",
-    user_email: "",
-    user_depart: "",
-    user_phone: "",
-    user_address: "",
-    role: "",
-    user_joindate: "",
+    username: '',
+    password: '',
+    user_name: '',
+    user_email: '',
+    user_depart: '',
+    user_phone: '',
+    user_address: '',
+    role: '',
+    user_joindate: '',
   });
 
   // 부서 정렬
@@ -47,7 +62,7 @@ const UserReg = () => {
 
   // 뒤로가기
   const handleCancelClick = () => {
-    navigate("/users/userList", { replace: true }); // '/users/userList' 경로로 이동
+    navigate('/users/userList', { replace: true }); // '/users/userList' 경로로 이동
   };
 
   //////////////useRef
@@ -65,16 +80,16 @@ const UserReg = () => {
 
   // 각 input 태그를 하나로 관리
   const [state, setState] = useState({
-    name: "",
-    depart: "",
+    name: '',
+    depart: '',
     date: getStringDate(new Date()),
-    auth: "",
-    firstPhoneInput: "",
-    secondPhoneInput: "",
-    email: "",
-    selectedDomain: "",
-    address: "",
-    userId: "",
+    auth: '',
+    firstPhoneInput: '',
+    secondPhoneInput: '',
+    email: '',
+    selectedDomain: '',
+    address: '',
+    userId: '',
   });
 
   // state 변환 함수 전체 관리
@@ -95,14 +110,14 @@ const UserReg = () => {
   // 사원번호 생성 버튼 활성화 조건
   useEffect(() => {
     if (
-      state.name !== "" &&
+      state.name !== '' &&
       state.depart !== 0 &&
       state.secondPhoneInput.length === 4
     ) {
       // 조건 만족시, 버튼 변경
-      makeIdBtn.current.className = "btn btn-primary";
+      makeIdBtn.current.className = 'btn btn-primary';
     } else {
-      makeIdBtn.current.className = "btn btn-secondary disabled";
+      makeIdBtn.current.className = 'btn btn-secondary disabled';
     }
   }, [state.name, state.depart, state.date, state.secondPhoneInput]);
 
@@ -115,18 +130,18 @@ const UserReg = () => {
       (it) => parseInt(it.depart_id) === parseInt(state.depart)
     );
     // 입사일 을 아이디 생성위해 자름
-    const subDate = state.date.replaceAll("-", "").slice(4, 9);
+    const subDate = state.date.replaceAll('-', '').slice(4, 9);
 
     const userId = `${selectedDepart.depart_short}${subDate}${state.secondPhoneInput}${randomTwoNumber}`;
     setState({ ...state, userId: userId });
   };
 
   const isUserIdValid = () => {
-    return state.userId.trim() !== "";
+    return state.userId.trim() !== '';
   };
 
   const isUserNameValid = () => {
-    return state.name.trim() !== "";
+    return state.name.trim() !== '';
   };
 
   const isPhoneInputValid = () => {
@@ -190,10 +205,10 @@ const UserReg = () => {
 
   // 비동기로 content가 업데이트 될 수 있는 시간을 벌어줌
   useEffect(() => {
-    if (content.username !== "") {
+    if (content.username !== '') {
       // content가 업데이트되었을 때만 onCreate 함수를 호출
       onCreate(content);
-      navigate("/users/userList", { replace: true });
+      navigate('/users/userList', { replace: true });
     }
   }, [content, onCreate, navigate]);
 
@@ -222,7 +237,7 @@ const UserReg = () => {
                     <div className="btn-wrapper">
                       <button
                         type="button"
-                        className={["btn", "disabled"].join(" ")}
+                        className={['btn', 'disabled'].join(' ')}
                         ref={makeIdBtn}
                         onClick={updateUserId}
                       >
@@ -281,9 +296,9 @@ const UserReg = () => {
                       ref={refs.userAuth}
                       onChange={handleChangeState}
                     >
-                      <option value={"none"}>권한을 선택하세요</option>
-                      <option value={"ROLE_USER"}>사원</option>
-                      <option value={"ROLE_ADMIN"}>관리자</option>
+                      <option value={'none'}>권한을 선택하세요</option>
+                      <option value={'ROLE_USER'}>사원</option>
+                      <option value={'ROLE_ADMIN'}>관리자</option>
                     </select>
                     <label htmlFor="selectAuth">권한</label>
                   </div>
@@ -363,9 +378,9 @@ const UserReg = () => {
                         value={state.selectedDomain}
                         onChange={handleChangeState}
                       >
-                        <option value={"none"}>선택</option>
-                        <option value={"gmail.com"}>gmail.com</option>
-                        <option value={"naver.com"}>naver.com</option>
+                        <option value={'none'}>선택</option>
+                        <option value={'gmail.com'}>gmail.com</option>
+                        <option value={'naver.com'}>naver.com</option>
                       </select>
                     </div>
                   </div>
@@ -386,7 +401,7 @@ const UserReg = () => {
                     <button
                       type="submit"
                       className={`btn ${
-                        validCheck() ? "btn-primary" : "btn-secondary disabled"
+                        validCheck() ? 'btn-primary' : 'btn-secondary disabled'
                       }`}
                       onClick={handleSubmit}
                     >

@@ -137,7 +137,7 @@ function ReturnDetailModal({ setOpenModal_exchange, num, returnList, getreturnLi
             <div className="row mb-3">
               <label htmlFor="" className="col-sm-2 col-form-label">신청자산</label>
               <div className="col-sm-10">
-                <input type="text" className="form-control" value={`${thisList().ASSETS_NAME}|${thisList().ASSETS_DETAIL_NAME}|${thisList().ASSETS_NUM}`} disabled />
+                <input type="text" className="form-control" value={`${thisList().ASSETS_NAME}|${thisList().ASSETS_DETAIL_NAME}`} disabled />
 
               </div>
             </div>
@@ -151,7 +151,7 @@ function ReturnDetailModal({ setOpenModal_exchange, num, returnList, getreturnLi
                   <option value="선택하기">선택하기</option>
                   {
                     selectAssetList.map((a, i) => {
-                          return <option key={i} value={`${a.ASSETS_NUM},${a.ASSETS_DETAIL_NAME}`}>{a.ASSETS_NAME}|{a.ASSETS_DETAIL_NAME}|{a.ASSETS_NUM}</option>
+                          return <option key={i} value={`${a.ASSETS_NUM},${a.ASSETS_DETAIL_NAME}`}>{a.ASSETS_NAME}|{a.ASSETS_DETAIL_NAME}</option>
                     }
 
                     )

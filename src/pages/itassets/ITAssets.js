@@ -1,87 +1,89 @@
-import { Link } from 'react-router-dom';
-import { useState, useEffect, useContext } from 'react';
-import React from 'react';
-import axios from 'axios';
-import Pagenation from '../../component/Pagenation';
-import ITAssetsInsert from './ITAssetsInsert';
-import ITAssetsInfo from './ITAssetsInfo';
-import ITAssetsModify from './ITAssetsModify';
-import PurchaseApproval from './PurchaseApproval';
-import ControlMenu from '../../component/ControlMenu';
-import { ItassetsOptionList } from '../../constants/OptionList';
-import ITAssetsItem from './ITAssetsItem';
-import { BsArrowClockwise } from 'react-icons/bs';
-import { tokenInfoContext } from '../../component/TokenInfoProvider';
-import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import React from "react";
+import axios from "axios";
+import Pagenation from "../../component/Pagenation";
+import ITAssetsInsert from "./ITAssetsInsert";
+import ITAssetsInfo from "./ITAssetsInfo";
+import ITAssetsModify from "./ITAssetsModify";
+import PurchaseApproval from "./PurchaseApproval";
+import ControlMenu from "../../component/ControlMenu";
+import { ItassetsOptionList } from "../../constants/OptionList";
+import ITAssetsItem from "./ITAssetsItem";
+import { BsArrowClockwise } from "react-icons/bs";
+import { tokenInfoContext } from "../../component/TokenInfoProvider";
+import { useNavigate } from "react-router-dom";
+import { AiTwotonePrinter } from "react-icons/ai";
+import ExcelDownload from "../../component/ExcelDownload";
 
 function ITAssets() {
   const { userRole, username } = useContext(tokenInfoContext);
   const navigate = useNavigate();
 
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    if (userRole !== 'ROLE_ADMIN' && userRole !== 'ROLE_HIGH_ADMIN') {
-      if (userRole === 'ROLE_USER') {
-        navigate('/user/userMain');
-      } else if (userRole === 'ROLE_ADMIN') {
-        navigate('/admin/adminMain');
-      } else if (userRole === 'ROLE_HIGH_ADMIN') {
-        navigate('/highadmin/highAdminMain');
-      } else if (userRole === 'none') {
-        navigate('/');
+    if (userRole !== "ROLE_ADMIN") {
+      if (userRole === "ROLE_USER") {
+        navigate("/user/userMain");
+      } else if (userRole === "ROLE_ADMIN") {
+        navigate("/admin/adminMain");
+      } else if (userRole === "ROLE_HIGH_ADMIN") {
+        navigate("/highadmin/highAdminMain");
+      } else if (userRole === "none") {
+        navigate("/");
       }
     }
   }, []);
 
-  const [selectedType, setSelectedType] = useState('선택하지않음');
+  const [selectedType, setSelectedType] = useState("선택하지않음");
   /* 폼데이터 초기화 */
   const resetFormdata = {
-    sw_mfg: '',
-    sw_spec_seriel: '',
-    sw_spec_warranty: '',
-    sw_purchase_date: '',
-    sw_price: '',
+    sw_mfg: "",
+    sw_spec_seriel: "",
+    sw_spec_warranty: "",
+    sw_purchase_date: "",
+    sw_price: "",
     /* etcspec */
-    etc_mfg: '',
-    etc_spec_warranty: '',
-    etc_purchase_date: '',
-    etc_price: '',
+    etc_mfg: "",
+    etc_spec_warranty: "",
+    etc_purchase_date: "",
+    etc_price: "",
     /* pcspec */
-    spec_cpu: '',
-    spec_ram: '',
-    spec_mainboard: '',
-    spec_power: '',
-    spec_gpu: '',
-    spec_hdd: '',
-    spec_ssd: '',
-    spec_ops: '',
-    spec_mfg: '',
-    spec_seriel: '',
-    spec_purchase_date: '',
+    spec_cpu: "",
+    spec_ram: "",
+    spec_mainboard: "",
+    spec_power: "",
+    spec_gpu: "",
+    spec_hdd: "",
+    spec_ssd: "",
+    spec_ops: "",
+    spec_mfg: "",
+    spec_seriel: "",
+    spec_purchase_date: "",
     /* serverspec */
-    server_mfg: '',
-    server_spec_warranty: '',
-    server_capa: '',
-    server_price: '',
-    server_purchase_date: '',
-    server_interface: '',
-    server_average_life: '',
-    server_rpm: '',
-    server_datarecovery_life: '',
+    server_mfg: "",
+    server_spec_warranty: "",
+    server_capa: "",
+    server_price: "",
+    server_purchase_date: "",
+    server_interface: "",
+    server_average_life: "",
+    server_rpm: "",
+    server_datarecovery_life: "",
     /* 승인요청 */
-    username: '',
-    appro_title: '',
-    appro_comment: '',
+    username: "",
+    appro_title: "",
+    appro_comment: "",
   };
 
   /* ITAssets테이블 데이터가져오기 */
   const [data, setData] = useState([]);
   const itassetList = () => {
     axios
-      .get('/assets/getITList', {
+      .get("/assets/getITList", {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: token,
         },
       })
@@ -99,13 +101,13 @@ function ITAssets() {
   /* 카테고리테이블 데이터 가져오기 */
   const [category, setCategory] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [selectedParent, setSelectedParent] = useState('선택하지않음');
+  const [selectedParent, setSelectedParent] = useState("선택하지않음");
   const [selectedChild, setSelectedChild] = useState(null);
   useEffect(() => {
     axios
-      .get('/categories/categories', {
+      .get("/categories/categories", {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: token,
         },
       })
@@ -138,7 +140,7 @@ function ITAssets() {
 
   const handleParentChange = (e) => {
     setSelectedParent(e.target.value);
-    setSelectedType('선택하지않음');
+    setSelectedType("선택하지않음");
     setFormData((prevData) => ({
       ...prevData,
       assets_tag: e.target.value,
@@ -159,45 +161,45 @@ function ITAssets() {
   const [selectedStatus, setSelectedStatus] = useState(null);
   const handleSelectChange2 = (e) => {
     const value = e.target.value;
-      if (value === "0") {
-        setSelectedStatus(null);
-      } else {
-        setSelectedStatus(value);
-      }
-      setCurrentPage(1);
+    if (value === "0") {
+      setSelectedStatus(null);
+    } else {
+      setSelectedStatus(value);
+    }
+    setCurrentPage(1);
   };
 
-  const [categoryStatus,setCategoryStatus] = useState(null);
+  const [categoryStatus, setCategoryStatus] = useState(null);
   const handleSelectChange3 = (e) => {
     const value = e.target.value;
-    if(value === "0") {
+    if (value === "0") {
       setCategoryStatus(null);
-    }else{
+    } else {
       setCategoryStatus(value);
     }
     setCurrentPage(1);
-  }
+  };
 
   /* 검색기능 */
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const filteredData = data.filter((item) => {
     const matchesSearchTerm = item.assets_name.includes(searchTerm);
 
     const selectFilter = selectedStatus
-    ? item.assets_status === selectedStatus
-    : true;
+      ? item.assets_status === selectedStatus
+      : true;
 
     const categoryFilter = categoryStatus
-    ? item.category_num === parseInt(categoryStatus)
-    : true;
+      ? item.category_num === parseInt(categoryStatus)
+      : true;
 
     return matchesSearchTerm && selectFilter && categoryFilter;
   });
 
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState("");
 
   const handleSearchKeyPress = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       setSearchTerm(searchInput);
     }
     setCurrentPage(1);
@@ -207,6 +209,7 @@ function ITAssets() {
   const [itemsPerPage, setItemPerPage] = useState(10); // 페이지당 10개의 아이템  useState(처음에 보이고싶은 개수)
   const handleSelectorChange = (event) => {
     setItemPerPage(Number(event.target.value));
+    setCurrentPage(1);
   };
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -232,8 +235,8 @@ function ITAssets() {
   /* 비동기로 db에 (insert)등록하기 */
   const [formData, setFormData] = useState({
     ...resetFormdata,
-    assets_tag: '',
-    assets_name: '',
+    assets_tag: "",
+    assets_name: "",
   });
 
   const handleChange = (e) => {
@@ -247,9 +250,9 @@ function ITAssets() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/assets/specInsert', formData, {
+      const response = await axios.post("/assets/specInsert", formData, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: token,
         },
       });
@@ -257,17 +260,17 @@ function ITAssets() {
         setFormData({
           // 폼 데이터 초기화
           ...resetFormdata,
-          assets_tag: '',
+          assets_tag: "",
           assets_name: selectedType,
         });
-        setSelectedType('선택하지않음');
-        setSelectedParent('선택하지않음');
+        setSelectedType("선택하지않음");
+        setSelectedParent("선택하지않음");
       }
       closeModal();
       itassetList();
       setIsModalOpen1(false);
     } catch (error) {
-      console.error('Error during data submission:', error);
+      console.error("Error during data submission:", error);
     }
   };
 
@@ -283,15 +286,15 @@ function ITAssets() {
   /* 자산 상태 업데이트 */
   const [status, setStatus] = useState(null);
   const [formStatus, setFormStatus] = useState({
-    assets_status: '',
-    assets_num: '',
-    username: '',
-    appro_title: '',
-    appro_comment: '',
-    category_num: '',
-    assets_name: '',
-    assets_detail_name: '',
-    spec_num: '',
+    assets_status: "",
+    assets_num: "",
+    username: "",
+    appro_title: "",
+    appro_comment: "",
+    category_num: "",
+    assets_name: "",
+    assets_detail_name: "",
+    spec_num: "",
   });
   const appro = (e) => {
     const { name, value } = e.target;
@@ -302,7 +305,7 @@ function ITAssets() {
   };
 
   const [assetstatus, setAssetstatus] = useState(
-    selectedItem ? selectedItem.assets_status : ''
+    selectedItem ? selectedItem.assets_status : ""
   );
   const handleStatus = (e) => {
     const { value } = e.target;
@@ -319,55 +322,55 @@ function ITAssets() {
 
     const updatedStatus = {
       assets_status: assetstatus,
-      assets_num: selectedItem ? selectedItem.assets_num : '',
-      username: username || '',
+      assets_num: selectedItem ? selectedItem.assets_num : "",
+      username: username || "",
       appro_title: formStatus.appro_title,
       appro_comment: formStatus.appro_comment,
-      category_num: selectedItem ? selectedItem.category_num : '',
-      assets_name: selectedItem ? selectedItem.assets_name : '',
-      assets_detail_name: selectedItem ? selectedItem.assets_detail_name : '',
-      spec_num: selectedItem ? selectedItem.spec_num : '',
+      category_num: selectedItem ? selectedItem.category_num : "",
+      assets_name: selectedItem ? selectedItem.assets_name : "",
+      assets_detail_name: selectedItem ? selectedItem.assets_detail_name : "",
+      spec_num: selectedItem ? selectedItem.spec_num : "",
     };
     try {
-      const update = await axios.post('/stock/statusUpdate', updatedStatus, {
+      const update = await axios.post("/stock/statusUpdate", updatedStatus, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: token,
         },
       });
       if (update.data) {
         setFormStatus({
           assets_status: status,
-          assets_num: '',
-          username: '',
-          appro_title: '',
-          appro_comment: '',
-          category_num: '',
-          assets_name: '',
-          assets_detail_name: '',
-          spec_num: '',
+          assets_num: "",
+          username: "",
+          appro_title: "",
+          appro_comment: "",
+          category_num: "",
+          assets_name: "",
+          assets_detail_name: "",
+          spec_num: "",
         });
       }
       itassetList();
     } catch (error) {
-      console.log('에러남', error);
+      console.log("에러남", error);
     }
   };
 
   const statusReset = () => {
-    setAssetstatus(selectedItem ? selectedItem.assets_status : '');
+    setAssetstatus(selectedItem ? selectedItem.assets_status : "");
     setFormStatus({
-      appro_title: '',
-      appro_comment: '',
+      appro_title: "",
+      appro_comment: "",
     });
   };
 
   const approveReset = () => {
-    setSelectedType('선택하지않음');
-    setSelectedParent('선택하지않음');
+    setSelectedType("선택하지않음");
+    setSelectedParent("선택하지않음");
     setFormapproval({
-      appro_title: '',
-      appro_comment: '',
+      appro_title: "",
+      appro_comment: "",
     });
   };
   /* 최종구매승인개수 */
@@ -375,9 +378,9 @@ function ITAssets() {
   const [itcount, setItcount] = useState(0);
   useEffect(() => {
     axios
-      .get('/assets/yncount', {
+      .get("/assets/yncount", {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: token,
         },
       })
@@ -387,9 +390,9 @@ function ITAssets() {
   }, []);
   useEffect(() => {
     axios
-      .get('/assets/itcount', {
+      .get("/assets/itcount", {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: token,
         },
       })
@@ -405,39 +408,39 @@ function ITAssets() {
       setIsModalOpen1(true);
       sendModal(category);
     } else {
-      alert('최종관리자에게 구매승인을 받으세요.');
+      alert("최종관리자에게 구매승인을 받으세요.");
       return;
     }
   }
   function modalClose() {
     setIsModalOpen1(false);
-    setSelectedType('선택하지않음');
-    setSelectedParent('선택하지않음');
+    setSelectedType("선택하지않음");
+    setSelectedParent("선택하지않음");
   }
   function modalClose1() {
     setIsModalOpen1(false);
-    setSelectedType('선택하지않음');
-    setSelectedParent('선택하지않음');
+    setSelectedType("선택하지않음");
+    setSelectedParent("선택하지않음");
     setFormapproval({
-      appro_title: '',
-      appro_comment: '',
+      appro_title: "",
+      appro_comment: "",
     });
   }
   /* 구매요청 */
   const [formapproval, setFormapproval] = useState({
-    username: username || '',
+    username: username || "",
     category_num: selectedType,
-    appro_title: '',
-    appro_comment: '',
+    appro_title: "",
+    appro_comment: "",
   });
   const handleSelectChange1 = (e) => {
     setSelectedType(e.target.value);
 
     setFormapproval((prevData) => ({
       category_num: e.target.value,
-      username: username || '',
-      appro_title: '',
-      appro_comment: '',
+      username: username || "",
+      appro_title: "",
+      appro_comment: "",
     }));
   };
 
@@ -452,24 +455,24 @@ function ITAssets() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        '/stock/purchaseApproval',
+        "/stock/purchaseApproval",
         formapproval,
         {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             Authorization: token,
           },
         }
       );
       if (response.data) {
         setFormapproval({
-          username: '',
-          category_num: '',
-          appro_title: '',
-          appro_comment: '',
+          username: "",
+          category_num: "",
+          appro_title: "",
+          appro_comment: "",
         });
-        setSelectedType('선택하지않음');
-        setSelectedParent('선택하지않음');
+        setSelectedType("선택하지않음");
+        setSelectedParent("선택하지않음");
       }
     } catch (error) {
       console.log(error);
@@ -478,14 +481,14 @@ function ITAssets() {
   /* 날씨 변환 */
   function formatDate(dateString) {
     if (!dateString || isNaN(new Date(dateString).getTime())) {
-      return ''; // 원하는 기본값으로 변경 가능
+      return ""; // 원하는 기본값으로 변경 가능
     }
 
     const dateObject = new Date(dateString);
 
     const year = dateObject.getFullYear();
-    const month = String(dateObject.getMonth() + 1).padStart(2, '0');
-    const day = String(dateObject.getDate()).padStart(2, '0');
+    const month = String(dateObject.getMonth() + 1).padStart(2, "0");
+    const day = String(dateObject.getDate()).padStart(2, "0");
 
     return `${year}년 ${month}월 ${day}일 `;
   }
@@ -494,14 +497,14 @@ function ITAssets() {
 
     return copyOptionList.filter(
       (it) =>
-        it.value !== 'leaveDate' &&
-        it.value !== 'detail' &&
-        it.value !== 'process'
+        it.value !== "leaveDate" &&
+        it.value !== "detail" &&
+        it.value !== "process"
     );
   };
 
   // 1. 정렬을 위한 state
-  const [sortType, setSortType] = useState('number'); // 정렬 컬럼 state
+  const [sortType, setSortType] = useState("number"); // 정렬 컬럼 state
   const [checkClass, setCheckClass] = useState(false); // 내림, 오름 차순 선택 state
 
   // 2. 각 정렬 선택에 따른 데이터 정렬 함수
@@ -513,7 +516,7 @@ function ITAssets() {
     const compare = (a, b) => {
       // 선택된 컬럼에 대해서 case 별로 분류
       switch (sortType) {
-        case 'assets_num': {
+        case "assets_num": {
           // 번호 : 숫자 비교 => 문자열 일 수도 있으니 parseInt 로 감싼다
           if (checkClass) {
             return parseInt(b.assets_num) - parseInt(a.assets_num); // 오름차순
@@ -521,7 +524,7 @@ function ITAssets() {
             return parseInt(a.assets_num) - parseInt(b.assets_num); // 내림차순
           }
         }
-        case 'assets_name': {
+        case "assets_name": {
           // 이름 : 문자열을 사전 순으로 비교한다
           if (checkClass) {
             return b.assets_name.localeCompare(a.assets_name);
@@ -529,7 +532,7 @@ function ITAssets() {
             return a.assets_name.localeCompare(b.assets_name);
           }
         }
-        case 'assets_status': {
+        case "assets_status": {
           // 부서
           if (checkClass) {
             return b.assets_status.localeCompare(a.assets_status);
@@ -537,7 +540,7 @@ function ITAssets() {
             return a.assets_status.localeCompare(b.assets_status);
           }
         }
-        case 'username': {
+        case "username": {
           // 두 문자열이 모두 존재하는지 확인
           const aExists = a.username !== null && a.username !== undefined;
           const bExists = b.username !== null && b.username !== undefined;
@@ -556,7 +559,7 @@ function ITAssets() {
             return a.username.localeCompare(b.username);
           }
         }
-        case 'add_date': {
+        case "add_date": {
           const a_add_date = new Date(a.add_date).getTime();
           const b_add_date = new Date(b.add_date).getTime();
 
@@ -566,7 +569,7 @@ function ITAssets() {
             return a_add_date - b_add_date;
           }
         }
-        case 'rent_date': {
+        case "rent_date": {
           const a_rent_date = new Date(a.rent_date).getTime();
           const b_rent_date = new Date(b.rent_date).getTime();
 
@@ -588,8 +591,8 @@ function ITAssets() {
   };
 
   const handleReset = () => {
-    setSearchInput('');
-    setSearchTerm('');
+    setSearchInput("");
+    setSearchTerm("");
     itassetList();
   };
 
@@ -612,12 +615,12 @@ function ITAssets() {
 
       {/* 등록하기 모달 정보 */}
       <div
-        className={`modal fade ${isModalOpen1 ? 'show' : ''}`}
+        className={`modal fade ${isModalOpen1 ? "show" : ""}`}
         tabIndex="-1"
-        style={{ display: isModalOpen1 ? 'block' : 'none' }}
+        style={{ display: isModalOpen1 ? "block" : "none" }}
       >
         <div className="modal-dialog">
-          <div className="modal-content" style={{ width: '700px' }}>
+          <div className="modal-content" style={{ width: "700px" }}>
             <ITAssetsInsert
               handleSubmit={handleSubmit}
               handleSelectChange={handleSelectChange}
@@ -654,7 +657,23 @@ function ITAssets() {
           <div className="col-lg-12">
             <div className="card">
               <div className="card-body">
-                <h5 className="card-title">재고 관리</h5>
+                <div className="row">
+                  <div className="col-6">
+                    <h5 className="card-title">재고관리</h5>
+                  </div>
+                  <div className="col-6 text-right">
+                    <div className="print-control react-icon">
+                      <AiTwotonePrinter
+                        onClick={() => window.print()}
+                        title="프린트"
+                      />
+                    </div>
+                    <div className="excel-control react-icon">
+                      <ExcelDownload page={""} />
+                    </div>
+                  </div>
+                </div>
+
                 <div className="datatable-wrapper datatable-loading nofooter sortable searchable fixed-columns">
                   <div className="datatable-top">
                     <div className="datatable-dropdown">
@@ -663,7 +682,7 @@ function ITAssets() {
                           className="datatable-selector"
                           value={itemsPerPage}
                           onChange={handleSelectorChange}
-                          style={{ marginRight: '10px' }}
+                          style={{ marginRight: "10px" }}
                         >
                           <option value="5">5</option>
                           <option value="10">10</option>
@@ -690,7 +709,10 @@ function ITAssets() {
                       </label>
                     </div>
 
-                    <div className="datatable-dropdown assetsDrop" style={{marginLeft: "10px"}}>
+                    <div
+                      className="datatable-dropdown assetsDrop"
+                      style={{ marginLeft: "10px" }}
+                    >
                       <label htmlFor="">
                         <select
                           className="datatable-selector"
@@ -723,9 +745,9 @@ function ITAssets() {
                       >
                         <BsArrowClockwise
                           style={{
-                            width: '30px',
-                            height: '30px',
-                            color: 'gray',
+                            width: "30px",
+                            height: "30px",
+                            color: "gray",
                           }}
                           onClick={handleReset}
                         />
@@ -745,7 +767,7 @@ function ITAssets() {
                         data-bs-toggle="modal"
                         data-bs-target="#verticalycentered"
                         onClick={() => sendModal(category)}
-                        style={{ marginLeft: '10px' }}
+                        style={{ marginLeft: "10px" }}
                       >
                         구매요청
                       </button>
@@ -754,7 +776,7 @@ function ITAssets() {
                         type="button"
                         className="btn btn-primary"
                         onClick={() => handleButtonClick(category)}
-                        style={{ marginLeft: '10px' }}
+                        style={{ marginLeft: "10px" }}
                       >
                         등록하기
                       </button>
@@ -799,7 +821,6 @@ function ITAssets() {
                           add_date={item.add_date}
                           rent_date={item.rent_date}
                           formatDate={formatDate}
-                          
                         />
                       ))}
                   </tbody>

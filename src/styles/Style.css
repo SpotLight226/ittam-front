@@ -859,3 +859,13 @@ h6 {
   color: rgba(19, 72, 231, 0.89);
   text-align: center;
 }
+
+.react-icon {
+  float: right;
+  width: 30px;
+  font-size: 23px;
+  line-height: 63px;
+}
+.react-icon:hover {
+  color: rgb(108, 108, 243);
+}

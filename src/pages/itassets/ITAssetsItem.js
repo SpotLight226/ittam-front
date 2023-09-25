@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import React from "react";
 
 const ITAssetsItem = ({
   currentPage,
@@ -17,7 +18,9 @@ const ITAssetsItem = ({
 }) => {
   return (
     <tr key={index}>
-      <th scope="row">{(currentPage - 1) * itemsPerPage + index + 1}</th>
+        <th scope="row">
+            {`${(currentPage - 1) * itemsPerPage + index + 1}`.padStart(4, '\u00A0')}
+        </th>
 
       <td>
         <Link

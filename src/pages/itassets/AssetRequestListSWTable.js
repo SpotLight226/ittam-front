@@ -15,6 +15,25 @@ const AssetRequestListSWTable = ({index, currentPage, itemsPerPage,
         server_mfg, server_spec_warranty, server_capa, server_price, server_purchase_date, server_interface, server_average_life, server_rpm, server_datarecovery_life,
         username, appro_title, appro_comment];
 
+    let categoryName;
+    switch (category_num) {
+        case 5:case 6:
+            categoryName = 'PC/노트북';
+            break;
+        case 7:case 8:case 9:case 10:case 11:case 12:
+            categoryName = '소프트웨어';
+            break;
+        case 13:case 14:case 15:case 16:case 17:
+            categoryName = '기타';
+            break;
+        case 18:
+            categoryName = '서버';
+            break;
+        default:
+            categoryName = '';
+            break;
+    }
+
     return (
         <tr className="prod-box">
             <th>
@@ -39,7 +58,7 @@ const AssetRequestListSWTable = ({index, currentPage, itemsPerPage,
             <td className="spec_mfg">{sw_mfg}</td>
             <td className="spec_seriel">{sw_spec_seriel}</td>
             <td className="spec_warranty">{sw_spec_warranty}</td>
-            <td className="category_name">{category_name}</td>
+            <td className="category_name">{categoryName}</td>
 
             <th className="assets_name" style={{ display: "none" }}>{assets_name}</th>
             <th className="category_num" style={{ display: "none" }}>{category_num}</th>

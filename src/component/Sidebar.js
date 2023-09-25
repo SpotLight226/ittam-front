@@ -9,217 +9,222 @@ function Sidebar() {
 
   console.log(1);
   return (
-    <aside id="sidebar" className="sidebar">
-      <ul className="sidebar-nav" id="sidebar-nav">
-        {userRole == 'ROLE_USER' && (
-          <li className="nav-item">
-            <Link to="/user/userMain" className="nav-link">
-              <i className="bi bi-grid"></i>
-              <span>사원메인페이지</span>
-            </Link>
-          </li>
-        )}
-        {userRole == 'ROLE_USER' && (
-            <li className="nav-item">
-              <Link to="/user/userMain_using" className="nav-link collapsed">
-                <i className="bi bi-check2-square"></i>
-                <span>나의 사용자산 목록</span>
-              </Link>
-            </li>
-        )}
-        {userRole == 'ROLE_USER' && (
-            <li className="nav-item">
-              <Link to="/user/userMain_request" className="nav-link collapsed">
-                <i className="bi bi-clipboard-check"></i>
-                <span>나의 사용/구매신청 목록</span>
-              </Link>
-            </li>
-        )}
-        {userRole == 'ROLE_ADMIN' && (
-          <li className="nav-item">
-            <Link to="/admin/adminMain" className="nav-link">
-              <i className="bi bi-grid"></i>
-              <span>관리자메인페이지</span>
-            </Link>
-          </li>
-        )}
-        {userRole == 'ROLE_HIGH_ADMIN' && (
-          <li className="nav-item">
-            <Link to="/highadmin/highAdminMain" className="nav-link">
-              <i className="bi bi-grid"></i>
-              <span>상위관리자메인페이지</span>
-            </Link>
-          </li>
-        )}
-        {userRole == 'ROLE_USER' && (
-          <li className="nav-item">
-            <Link
-              to="/"
-              className="nav-link collapsed"
-              data-bs-target="#components-nav"
-              data-bs-toggle="collapse"
-            >
-              <i className="bi bi-server"></i>
-              <span>IT 자산 목록</span>
-              <i className="bi bi-chevron-down ms-auto"></i>
-            </Link>
-            <ul
-              id="components-nav"
-              className="nav-content collapse "
-              data-bs-parent="#sidebar-nav"
-            >
-              <li>
-                <Link to="/itassets">
-                  <span>전체 목록</span>
+    <>
+      {userRole !== 'none' && (
+        <aside id="sidebar" className="sidebar">
+          <ul className="sidebar-nav" id="sidebar-nav">
+            {userRole == 'ROLE_USER' && (
+              <li className="nav-item">
+                <Link to="/user/userMain" className="nav-link">
+                  <i className="bi bi-grid"></i>
+                  <span>사원메인페이지</span>
                 </Link>
               </li>
-              <li className="accordion-item" style={{ border: 'none' }}>
-                <button
-                  className="accordion-button collapsed"
-                  type="button"
+            )}
+            {userRole == 'ROLE_USER' && (
+              <li className="nav-item">
+                <Link to="/user/userMain_using" className="nav-link collapsed">
+                  <i className="bi bi-check2-square"></i>
+                  <span>나의 사용자산 목록</span>
+                </Link>
+              </li>
+            )}
+            {userRole == 'ROLE_USER' && (
+              <li className="nav-item">
+                <Link
+                  to="/user/userMain_request"
+                  className="nav-link collapsed"
+                >
+                  <i className="bi bi-clipboard-check"></i>
+                  <span>나의 사용/구매신청 목록</span>
+                </Link>
+              </li>
+            )}
+            {userRole == 'ROLE_ADMIN' && (
+              <li className="nav-item">
+                <Link to="/admin/adminMain" className="nav-link">
+                  <i className="bi bi-grid"></i>
+                  <span>관리자메인페이지</span>
+                </Link>
+              </li>
+            )}
+            {userRole == 'ROLE_HIGH_ADMIN' && (
+              <li className="nav-item">
+                <Link to="/highadmin/highAdminMain" className="nav-link">
+                  <i className="bi bi-grid"></i>
+                  <span>상위관리자메인페이지</span>
+                </Link>
+              </li>
+            )}
+            {userRole == 'ROLE_USER' && (
+              <li className="nav-item">
+                <Link
+                  to="/"
+                  className="nav-link collapsed"
+                  data-bs-target="#components-nav"
                   data-bs-toggle="collapse"
-                  data-bs-target="#flush-collapseOne"
-                  aria-expanded="false"
-                  aria-controls="flush-collapseOne"
                 >
-                  <span className="nav-category-sidebar">카테고리별</span>
-                </button>
-                <div
-                  id="flush-collapseOne"
-                  className="accordion-collapse collapse"
-                  aria-labelledby="flush-headingOne"
-                  data-bs-parent="#accordionFlushExample"
+                  <i className="bi bi-server"></i>
+                  <span>IT 자산 목록</span>
+                  <i className="bi bi-chevron-down ms-auto"></i>
+                </Link>
+                <ul
+                  id="components-nav"
+                  className="nav-content collapse "
+                  data-bs-parent="#sidebar-nav"
                 >
-                  <Link to="/itassets/pc">
-                    <div
-                      className="accordion-body nav-category-sidebar"
-                      style={{ marginTop: '-15px' }}
+                  <li>
+                    <Link to="/itassets">
+                      <span>전체 목록</span>
+                    </Link>
+                  </li>
+                  <li className="accordion-item" style={{ border: 'none' }}>
+                    <button
+                      className="accordion-button collapsed"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#flush-collapseOne"
+                      aria-expanded="false"
+                      aria-controls="flush-collapseOne"
                     >
-                      PC/노트북
-                    </div>
-                  </Link>
-                </div>
-                <div
-                  id="flush-collapseOne"
-                  className="accordion-collapse collapse"
-                  aria-labelledby="flush-headingOne"
-                  data-bs-parent="#accordionFlushExample"
-                >
-                  <Link to="/itassets/sw">
+                      <span className="nav-category-sidebar">카테고리별</span>
+                    </button>
                     <div
-                      className="accordion-body nav-category-sidebar"
-                      style={{ marginTop: '-25px' }}
+                      id="flush-collapseOne"
+                      className="accordion-collapse collapse"
+                      aria-labelledby="flush-headingOne"
+                      data-bs-parent="#accordionFlushExample"
                     >
-                      소프트웨어
+                      <Link to="/itassets/pc">
+                        <div
+                          className="accordion-body nav-category-sidebar"
+                          style={{ marginTop: '-15px' }}
+                        >
+                          PC/노트북
+                        </div>
+                      </Link>
                     </div>
-                  </Link>
-                </div>
-                <div
-                  id="flush-collapseOne"
-                  className="accordion-collapse collapse"
-                  aria-labelledby="flush-headingOne"
-                  data-bs-parent="#accordionFlushExample"
-                >
-                  <Link to="/itassets/sv">
                     <div
-                      className="accordion-body nav-category-sidebar"
-                      style={{ marginTop: '-25px' }}
+                      id="flush-collapseOne"
+                      className="accordion-collapse collapse"
+                      aria-labelledby="flush-headingOne"
+                      data-bs-parent="#accordionFlushExample"
                     >
-                      서버
+                      <Link to="/itassets/sw">
+                        <div
+                          className="accordion-body nav-category-sidebar"
+                          style={{ marginTop: '-25px' }}
+                        >
+                          소프트웨어
+                        </div>
+                      </Link>
                     </div>
-                  </Link>
-                </div>
-                <div
-                  id="flush-collapseOne"
-                  className="accordion-collapse collapse"
-                  aria-labelledby="flush-headingOne"
-                  data-bs-parent="#accordionFlushExample"
-                >
-                  <Link to="/itassets/etc">
                     <div
-                      className="accordion-body nav-category-sidebar"
-                      style={{ marginTop: '-25px' }}
+                      id="flush-collapseOne"
+                      className="accordion-collapse collapse"
+                      aria-labelledby="flush-headingOne"
+                      data-bs-parent="#accordionFlushExample"
                     >
-                      기타
+                      <Link to="/itassets/sv">
+                        <div
+                          className="accordion-body nav-category-sidebar"
+                          style={{ marginTop: '-25px' }}
+                        >
+                          서버
+                        </div>
+                      </Link>
                     </div>
-                  </Link>
-                </div>
+                    <div
+                      id="flush-collapseOne"
+                      className="accordion-collapse collapse"
+                      aria-labelledby="flush-headingOne"
+                      data-bs-parent="#accordionFlushExample"
+                    >
+                      <Link to="/itassets/etc">
+                        <div
+                          className="accordion-body nav-category-sidebar"
+                          style={{ marginTop: '-25px' }}
+                        >
+                          기타
+                        </div>
+                      </Link>
+                    </div>
+                  </li>
+                </ul>
               </li>
-            </ul>
-          </li>
-        )}
-        {/* <!-- End Components Nav --> */}
-        {userRole == 'ROLE_ADMIN' && (
-          <li className="nav-item">
-            <Link
-              to="####"
-              className="nav-link collapsed"
-              data-bs-target="#forms-nav"
-              data-bs-toggle="collapse"
-            >
-              <i className="bi bi-server"></i>
-              <span>IT 자산</span>
-              <i className="bi bi-chevron-down ms-auto"></i>
-            </Link>
-            <ul
-              id="forms-nav"
-              className="nav-content collapse "
-              data-bs-parent="#sidebar-nav"
-            >
-              <li>
-                <Link to="/adminitassets">
-                  <i className="bi bi-circle"></i>
-                  <span>재고 관리</span>
+            )}
+            {/* <!-- End Components Nav --> */}
+            {userRole == 'ROLE_ADMIN' && (
+              <li className="nav-item">
+                <Link
+                  to="####"
+                  className="nav-link collapsed"
+                  data-bs-target="#forms-nav"
+                  data-bs-toggle="collapse"
+                >
+                  <i className="bi bi-server"></i>
+                  <span>IT 자산</span>
+                  <i className="bi bi-chevron-down ms-auto"></i>
                 </Link>
+                <ul
+                  id="forms-nav"
+                  className="nav-content collapse "
+                  data-bs-parent="#sidebar-nav"
+                >
+                  <li>
+                    <Link to="/adminitassets">
+                      <i className="bi bi-circle"></i>
+                      <span>재고 관리</span>
+                    </Link>
+                  </li>
+                </ul>
               </li>
-            </ul>
-          </li>
-        )}
-        {/* <!-- End Forms Nav --> */}
-        {userRole == 'ROLE_ADMIN' && (
-          <li className="nav-item">
-            <Link
-              to="#"
-              className="nav-link collapsed"
-              data-bs-target="#charts-nav"
-              data-bs-toggle="collapse"
-            >
-              <i className="bi bi-receipt"></i>
-              <span>사용자 신청</span>
-              <i className="bi bi-chevron-down ms-auto"></i>
-            </Link>
-            <ul
-              id="charts-nav"
-              className="nav-content collapse "
-              data-bs-parent="#sidebar-nav"
-            >
-              <li>
-                <Link to="/admin/approveList">
-                  <i className="bi bi-circle"></i>
-                  <span>사용 신청 목록</span>
+            )}
+            {/* <!-- End Forms Nav --> */}
+            {userRole == 'ROLE_ADMIN' && (
+              <li className="nav-item">
+                <Link
+                  to="#"
+                  className="nav-link collapsed"
+                  data-bs-target="#charts-nav"
+                  data-bs-toggle="collapse"
+                >
+                  <i className="bi bi-receipt"></i>
+                  <span>사용자 신청</span>
+                  <i className="bi bi-chevron-down ms-auto"></i>
                 </Link>
+                <ul
+                  id="charts-nav"
+                  className="nav-content collapse "
+                  data-bs-parent="#sidebar-nav"
+                >
+                  <li>
+                    <Link to="/admin/approveList">
+                      <i className="bi bi-circle"></i>
+                      <span>사용 신청 목록</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/admin/approveHandle">
+                      <i className="bi bi-circle"></i>
+                      <span>사용 처리 목록</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/admin/approveBuyList">
+                      <i className="bi bi-circle"></i>
+                      <span>구매 신청 목록</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/admin/approveBuyHandle">
+                      <i className="bi bi-circle"></i>
+                      <span>구매 처리 목록</span>
+                    </Link>
+                  </li>
+                </ul>
               </li>
-              <li>
-                <Link to="/admin/approveHandle">
-                  <i className="bi bi-circle"></i>
-                  <span>사용 처리 목록</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="/admin/approveBuyList">
-                  <i className="bi bi-circle"></i>
-                  <span>구매 신청 목록</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="/admin/approveBuyHandle">
-                  <i className="bi bi-circle"></i>
-                  <span>구매 처리 목록</span>
-                </Link>
-              </li>
-            </ul>
-          </li>
-        )}
+            )}
 
         {userRole == 'ROLE_HIGH_ADMIN' && (
           <li className="nav-item">
@@ -229,7 +234,7 @@ function Sidebar() {
               data-bs-target="#high-nav"
               data-bs-toggle="collapse"
             >
-              <i className="bi bi-bar-chart"></i>
+              <i className="bi bi-receipt"></i>
               <span>관리자 신청</span>
               <i className="bi bi-chevron-down ms-auto"></i>
             </Link>
@@ -314,17 +319,39 @@ function Sidebar() {
           </li>
         )}
 
-        <li className="nav-heading">설정</li>
+            <li className="nav-heading">설정</li>
 
         <li className="nav-item">
+
+        {userRole == 'ROLE_HIGH_ADMIN' &&  (
           <Link to="/noticelist" className="nav-link collapsed">
             <i className="bi bi-ui-checks"></i>
             <span>공지사항</span>
           </Link>
+        )}
+
+        {userRole == 'ROLE_ADMIN' &&  (
+          <Link to="/noticelist" className="nav-link collapsed">
+            <i className="bi bi-ui-checks"></i>
+            <span>공지사항</span>
+          </Link>
+        )}
+
+        {userRole == 'ROLE_USER' && (
+          <Link to="/noticeuser" className="nav-link collapsed">
+            <i className="bi bi-ui-checks"></i>
+            <span>공지사항</span>
+          </Link>
+        )}
+
+
+
         </li>
         {/* <!-- End Profile Page Nav --> */}
       </ul>
     </aside>
+      )}
+  </>
   );
 }
 

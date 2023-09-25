@@ -4,6 +4,9 @@ import axios from "axios";
 import { Link,useNavigate} from "react-router-dom";
 import NoticeUserTable from "./NoticeUserTable";
 import Pagenation from "../../component/Pagenation";
+import { BsArrowClockwise } from "react-icons/bs";
+import {NoticeOptionList} from "../../constants/OptionList"
+import ControlMenu from "../../component/ControlMenu";
 
 function NoticeUser(){
 
@@ -77,6 +80,8 @@ function NoticeUser(){
          // 검색 결과를 처리
          console.log(response.data);
          setNoticeList(response.data);
+        // 페이지를 1페이지로 설정
+        setCurrentPage(1);
        })
        .catch((error) => {
          alert("에러 발생: " + error);
@@ -100,6 +105,8 @@ function NoticeUser(){
          // 검색 결과를 처리
          console.log(response.data);
          setNoticeList(response.data);
+        // 페이지를 1페이지로 설정
+        setCurrentPage(1);
        })
        .catch((error) => {
          alert("에러 발생: " + error);
@@ -121,6 +128,8 @@ function NoticeUser(){
          // 검색 결과를 처리
          console.log(response.data);
          setNoticeList(response.data);
+         // 페이지를 1페이지로 설정
+         setCurrentPage(1);
        })
        .catch((error) => {
          alert("에러 발생: " + error);
@@ -132,15 +141,23 @@ function NoticeUser(){
  
      const searchStartDate = document.getElementById("searchStartDate");
      const searchEndDate = document.getElementById("searchEndDate");
- 
-     console.log(searchStartDate.value);
-     console.log(searchEndDate.value);
- 
-     const data = {
-       notice_regdate : searchStartDate.value,
-       notice_enddate : searchEndDate.value
-     }
- 
+
+     const startDate = searchStartDate.value;
+     const endDate = searchEndDate.value;
+    
+    // 시작일과 종료일 중 적어도 하나가 비어 있는 경우
+    if (!startDate || !endDate) {
+      alert('등록일과 만료일을 모두 설정해주세요.');
+      return; // 검색을 중지하고 알림만 표시
+    }
+
+    const data = {
+      notice_regdate: startDate,
+      notice_enddate: endDate,
+    }
+
+
+
  
      axios({
        url: "http://localhost:9191/noticelist/searchDate", // 검색을 처리할 서버 엔드포인트
@@ -218,6 +235,113 @@ function NoticeUser(){
      setCurrentPage(pageNumber);
    };
 
+   const resetBtn = () => {
+    setSearchText({
+      notice_regdate: "",
+      notice_title: "",
+      notice_name: "",
+      notice_enddate: "",
+      notice_content: "",
+      notice_hits: "",
+      notice_num: "",
+    });
+  
+    // 날짜 입력 필드 초기화
+    const searchStartDate = document.getElementById("searchStartDate");
+    const searchEndDate = document.getElementById("searchEndDate");
+  
+    if (searchStartDate && searchEndDate) {
+      searchStartDate.value = "";
+      searchEndDate.value = "";
+    }
+  
+    // 페이지를 다시 로드 (원상태로 돌아감)
+    getList();
+  };
+
+
+  const getProcessedOption = () => {
+    const copyOptionList = JSON.parse(JSON.stringify(NoticeOptionList));
+
+    return copyOptionList.filter(
+      (it) =>
+        it.value !== "edit" &&
+        it.value !== "delete"
+    );
+  };
+
+
+// 1. 정렬을 위한 state
+const [sortType, setSortType] = useState("number"); // 정렬 컬럼 state
+const [checkClass, setCheckClass] = useState(false); // 내림, 오름 차순 선택 state
+
+// 2. 각 정렬 선택에 따른 데이터 정렬 함수
+const getProcessedList = () => {
+  // 기존 리스트는 수정하지 않기 위해서 깊은 복사
+  const copyList = JSON.parse(JSON.stringify(noticeList));
+
+  // 각 선택된 링크에 대한 비교함수
+  const compare = (a, b) => {
+    // 선택된 컬럼에 대해서 case 별로 분류
+    switch (sortType) {
+      case "number": {
+        // 번호 : 숫자 비교 => 문자열 일 수도 있으니 parseInt 로 감싼다
+        if (checkClass) {
+          return parseInt(b.number) - parseInt(a.number); // 오름차순
+        } else {
+          return parseInt(a.number) - parseInt(b.number); // 내림차순
+        }
+      }
+      case "regdate": {
+        const a_date = new Date(a.notice_regdate).getTime();
+        const b_date = new Date(b.notice_regdate).getTime();
+
+        if (checkClass) {
+          return b_date - a_date;
+        } else {
+          return a_date - b_date;
+        }
+      }
+      case "title": {
+        if (checkClass) {
+          return b.notice_title.localeCompare(a.notice_title);
+        } else {
+          return a.notice_title.localeCompare(b.notice_title);
+        }
+      }
+      case "enddate": {
+        const a_date = new Date(a.notice_enddate).getTime();
+        const b_date = new Date(b.notice_enddate).getTime();
+
+        if (checkClass) {
+          return b_date - a_date;
+        } else {
+          return a_date - b_date;
+        }
+      }
+      case "click": {
+        // 번호 : 숫자 비교 => 문자열 일 수도 있으니 parseInt 로 감싼다
+        if (checkClass) {
+          return parseInt(b.notice_hits) - parseInt(a.notice_hits); // 오름차순
+        } else {
+          return parseInt(a.notice_hits) - parseInt(b.notice_hits); // 내림차순
+        }
+      }
+      default: {
+        return null;
+      }
+    }
+  };
+
+  // 비교함수에따라 정렬
+  const sortedList = copyList.sort(compare);
+  return sortedList;
+};
+
+
+
+
+
   return (
     <div>
       <main id="main" className="main">
@@ -246,7 +370,7 @@ function NoticeUser(){
                       </div>
 
                       <div className="tag-element tag-element--faq">
-                        <button className="btn btn-primary" style={{ marginRight: '10px' }} onClick={handleSearchAll}>전체</button>
+                          <button className="btn btn-primary" style={{ marginRight: '10px' }} onClick={handleSearchAll}>전체</button>
                         <button className="btn btn-primary" style={{ marginRight: '10px' }} onClick={handleSearchActive}>진행중</button>
                         <button className="btn btn-primary" style={{ marginRight: '10px' }} onClick={handleSearchExpire}>만료</button>
                       </div>
@@ -264,12 +388,16 @@ function NoticeUser(){
                         className="form-control"
                         />
                       </div>
-
+                      <div className="col-sm-2">
                       <button className="btn btn-primary searchBtn" type="button" onClick={handleSearchDate} > 
                       검색 
                       </button>
+                      </div>
 
                       <div className="datatable-search">
+                      <button type="button" className="btn btn-primary reset-btn"style={{ marginBottom: "5px" }}><BsArrowClockwise style={{width : "30px", height : "30px", color : "gray"}}
+                                                                                                        onClick={resetBtn}/></button>
+
                         <input
                           type="search"
                           value={searchText.notice_title}
@@ -288,43 +416,20 @@ function NoticeUser(){
                   <table className="table datatable">
                     <thead>
                       <tr>
-                        <th data-sortable="true">
-                          <Link to="#" className="datatable-sorter" >
-                            #
-                          </Link>
-                        </th>
-                        <th data-sortable="true">
-                          <Link to="#" className="datatable-sorter">
-                            등록날짜
-                          </Link>
-                        </th>
-                        <th data-sortable="true">
-                          <Link to="#" className="datatable-sorter">
-                            제목
-                          </Link>
-                        </th>
-                        <th data-sortable="true">
-                          <Link to="#" className="datatable-sorter">
-                            작성자
-                          </Link>
-                        </th>
-
-                        <th data-sortable="true">
-                          <Link to="#" 
-                          className="datatable-sorter">
-                            만료날짜
-                          </Link>
-                        </th>
-                        <th data-sortable="true">
-                          <Link to="#" 
-                          className="datatable-sorter">
-                            조회수
-                          </Link>
-                        </th>
+                      {getProcessedOption().map((it, idx) => (
+                        <ControlMenu
+                          key={idx}
+                          {...it}
+                          checkClass={checkClass}
+                          sortType={sortType}
+                          setSortType={setSortType}
+                          setCheckClass={setCheckClass}
+                        />
+                      ))}
                       </tr>
                     </thead>
                      <tbody>
-                      {noticeList.slice(
+                      {getProcessedList().slice(
                         (currentPage - 1) * itemsPerPage,
                         currentPage * itemsPerPage
                       ).map((item, index) => (
@@ -333,6 +438,8 @@ function NoticeUser(){
                           {...item}
                           index={(currentPage - 1) * itemsPerPage + index} // 순번 계산
                           setNoticeData={setNoticeData}
+                          currentPage={currentPage}
+                          itemsPerPage={itemsPerPage}
                         />
                       ))}
                       {/* {noticeList.map((notice) => (

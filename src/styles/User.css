@@ -44,16 +44,3 @@ tbody .prod-box .userName .hover-bold:hover {
 .selected-search {
   margin-right: 10px;
 }
-
-/* 엑셀 버튼 */
-.excel-control {
-  display: flex;
-  justify-content: flex-end;
-  padding: 20px 0 15px 0;
-}
-
-.excel-down {
-  margin-right: 10px; /* 원하는 간격으로 조절 */
-  font-size: 20px;
-  cursor: pointer;
-}

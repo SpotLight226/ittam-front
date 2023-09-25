@@ -94,6 +94,8 @@ function NoticeWrite() {
                         className="form-control"
                         name="author"
                         id="inputName"
+                        value={"관리자"}
+                        readOnly disabled
                       />
                     </div>
                   </div>

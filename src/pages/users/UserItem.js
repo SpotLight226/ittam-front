@@ -1,3 +1,5 @@
+import React from "react";
+
 const UserItem = ({
   user_email,
   username,
@@ -11,26 +13,26 @@ const UserItem = ({
   idx,
   onUserClick, // 모달 열기 함수
 }) => {
-  const isClickable = isUser && !user_leavedate; // isUser가 true인 경우에만 클릭 가능하도록 설정
-
-  const handleClick = () => {
-    if (isClickable) {
-      onUserClick(username);
-    }
-  };
-
   return (
     <tr className="prod-box">
-      <th scope="row">{isUser ? id : idx + 1}</th>
-      <td
-        className={`userName ${isClickable ? "clickable" : ""}`} // 클릭 가능한 경우에 클래스를 추가
-        onClick={handleClick}
-        data-bs-toggle="modal" // 모달을 열도록 설정
-        data-bs-target="#userModal" // 모달의 ID를 여기에 설정
-        style={{ cursor: "pointer" }}
-      >
-        <span className="hover-bold">{user_name}</span>
-      </td>
+      <th scope="row">{`${isUser ? id : idx + 1}`.padStart(4, "\u00A0")}</th>
+      {isUser ? (
+        <td
+          className="userName" // 클릭 가능한 경우에 클래스를 추가
+          onClick={() => onUserClick(username)}
+          data-bs-toggle="modal" // 모달을 열도록 설정
+          data-bs-target="#userModal" // 모달의 ID를 여기에 설정
+          style={{ cursor: "pointer" }}
+        >
+          <span className="hover-bold">{user_name}</span>
+        </td>
+      ) : (
+        <td
+          className="userName" // 클릭 가능한 경우에 클래스를 추가
+        >
+          <span>{user_name}</span>
+        </td>
+      )}
       <td className="userId">{username}</td>
       <td className="userDepart">{user_depart}</td>
       {isUser ? (

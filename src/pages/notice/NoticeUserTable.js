@@ -22,7 +22,7 @@ const NoticeUserTable = ({
   notice_content,
   notice_hits,
   notice_num,
-  setNoticeData,
+  setNoticeData,currentPage, itemsPerPage,
 }) => {
   const navigate = useNavigate(); // navigate 함수 생성
 
@@ -43,7 +43,9 @@ const NoticeUserTable = ({
   return (
     <Fragment>
       <tr className="prod-box NoticeListTable">
-        <th scope="row">{index + 1}</th>
+        <th scope="row">
+          {`${(currentPage - 1) * itemsPerPage + index + 1}`.padStart(4, '\u00A0')}
+        </th>
         <td className="notice_regdate">{formatDate(notice_regdate)}</td>
         <td
           className="notice_title"
